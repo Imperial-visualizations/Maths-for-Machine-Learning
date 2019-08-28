@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Page Info-->
+    <title>Principal Component Analysis</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style/skeleton.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../Penny's Game/style/guidance.css">
+    <link rel="stylesheet" href="../Penny's Game/style/skeleton.css">
+    <link rel="stylesheet" href="../Penny's Game/style/style.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'> async </script>
+    <script src="./script/jquery-csv.js"></script>
+    <script src="https://cdnjs.com/libraries/mathjs"></script>
+</head>
+
+<body>
+
+    <div class="guide">
+            Instructions for use
+        </div>
+        <div class="guideModal">
+            <div class="guideTest"></div>
+            <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+            <div class="modalContent">
+                <p id="modal_0">
+                    We're now going to try and reconstruct our original data from the compressed data we have. Earlier, we did the following to compute the projected data PC from normalised dataset X:                  
+                    $$
+                    PC = V_k \cdot X
+                    $$
+
+                    Now if we have PC and look to recompute X, we obviously do 
+
+                    $$
+                    X = V_k^{-1} \cdot PC
+                    $$
+
+                    but since PC is orthonormal,
+
+                    $$
+                    X = V_k^T \cdot PC
+                    $$
+
+                    We then denormalise X and voila, we have our original data again!
+                </p>
+                <p id="modal_1" hidden>
+                    If you hit the button, you will reconstruct a random datapoint. Sliding the slider changes the number of principal components used in the compression of the data - obviously the more the better.
+                    Compare the reconstruction to the original.
+                </p>
+                <p id="modal_2" hidden>
+                    Hit next page to go to the next page.
+                </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <div id="graph"></div>
+            <div id="pcslider" style="text-align: center">
+                <label class="sliderTitle">Number of Principle Components:&nbsp;<span id="aControllerDisplay" data-unit="">3</span> </label><label class="slider"><input id="aController" class="inputs" type="range" value="3" min="2" max="3" step="1"/></label>
+                <button class="randomButton">Reconstruct random data point</button>
+            </div>
+            <p style="text-align: center; background-color: lightblue; margin-left: 20%; margin-right: 20%">
+                Clearly we lose a bit of information by projecting this data onto a lower dimension subspace - the reconstructed data points aren't quite the same as the the original. PCA ultimately does not preserve 100% of the information about the data but rather
+                allows us to effectively get the gist for what this complex dataset's structure without having too much information.
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <form action="./pcaparallelcoordinates.html">
+                <input type="submit" value="Back to start"/>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="script/fisher-iris-dataset.js"></script>
+<script src="script/general-utilities.js"></script>
+<script src="script/maths-utilities.js"></script>
+<script src="script/reconstruction.js"></script>
+<script src="../Penny's Game/script/guidance.js"></script>
+</html>

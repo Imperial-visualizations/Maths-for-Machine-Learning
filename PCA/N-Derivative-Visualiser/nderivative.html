@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>nth Derivative</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style\skeleton.css">
+    <link rel="stylesheet" href="style\style.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <h1>Polynomial Derivatives</h1>
+                <div id='graph' style="width:350px; height:600px;"></div>
+            </div>
+
+            <!--Bottons/Sliders-->
+            <div class="six columns">
+                <!--Main Options/Tabs-->
+                <!--BEGIN Slider-->
+                    <!--These Sliders are shared among all tabs-->
+
+                    <!--Slider Display--> <!--Linked with the slider below-->
+                    <!--Linked with a slider and shows the live values of its corresponding slider-->
+                    <label class="sliderTitle">Degree:&nbsp;<!--rho-->
+                        <span id="aControllerDisplay" data-unit="">1</span> <!--default: 0-->
+                    </label>
+
+                    <!--Slider-->
+                    <!--NB: Be careful with classes and types-->
+                    <label class="slider">
+                        <input id="aController" class="inputs" type="range" value="1" min="1" max="4" step="1"/>
+                        <span class="sliderMin">1</span><span class="sliderMax">4</span>
+                    </label>
+                    <!--END Slider-->
+                   
+                <!--BEGIN Input function box -->
+                <div id="input">
+                    <label>Input Function: f(x)=
+                        <input id = "aInput" type="text" value = "x**2">
+                        <p id= "aInputError" style="color:#ff0000" hidden></p>
+                    </label>
+                </div>
+                <!--END Input function box  -->
+
+            </div>
+        </div>
+    </div>
+
+    <!--THE BRAINS-->
+    <script src=script/objects.js></script>
+    <script src=script/nderivative.js></script>
+</body>
+
+</html>

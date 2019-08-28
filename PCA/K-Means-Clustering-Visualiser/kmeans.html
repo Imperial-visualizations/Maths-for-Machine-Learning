@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>K Means Clustering</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style/skeleton.css">
+    <link rel="stylesheet" href="style/style.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+    <script src="./script/jquery-csv.js"></script>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+            <div id="Dataset" class="tabcontent">
+                    <!--html content for here-->
+                </div>
+
+                <div id="Variance" class="tabcontent">
+                    <!--html content for here-->
+                </div>
+                
+
+            <button class="tablink" onclick="switchTab('Dataset')" id="defaultOpen">Analyse Dataset</button>
+            <button class="tablink" onclick="switchTab('Variance')">Understanding Spread</button>
+        
+        <div class="row">
+            
+            <!-- Graph -->
+     
+
+            <div class="twelve columns">
+                <div id='padding' style="widows: 800%px; height:20px;"></div>
+                <h1>K Means Clustering</h1>
+                <div id='graph1' style="widows: 800%px; height:550%px"></div>
+                <div id='graph2' style="widows: 800%px; height:550%px"></div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <!--THE BRAINS-->
+    <script src=script/objects.js></script>
+    <script src=script/kmeans.js></script>
+</body>
+
+</html>

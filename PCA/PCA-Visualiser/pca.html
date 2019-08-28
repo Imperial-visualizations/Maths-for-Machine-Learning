@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>Principal Component Analysis</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style/skeleton.css">
+    <link rel="stylesheet" href="style/style.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'> async </script>
+    <script src="./script/jquery-csv.js"></script>
+    <script src="https://cdnjs.com/libraries/mathjs"></script>
+
+    <script type="text/javascript">
+        divVisibilityMap = new Map([['transformationmaths', false], ['explainedvariancemaths', false], ['covariancematrix', false], ['reconstructionmaths', false]]);
+
+        function toggleVisibility(toggleDiv) {
+            visible = !divVisibilityMap.get(toggleDiv);
+            divVisibilityMap.set(toggleDiv, visible); 
+            if (visible) {
+                document.getElementById(toggleDiv).style.display = 'block';
+            } else {
+                document.getElementById(toggleDiv).style.display = 'none';
+                if (toggleDiv == 'covariancematrix') {
+                    document.getElementById("graph2").innerHTML = "";
+                }
+            }
+        }
+        
+
+    </script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+            <div id="Dataset" class="tabcontent">
+                    <!--html content for here-->
+                </div>
+                
+                <div id="Covariance" class="tabcontent">
+                    <!--html content for here-->
+                </div>
+
+                <div id="Eigenvectors" class="tabcontent">
+                    <!--html content for here-->
+                </div>
+
+                <div id="Result" class="tabcontent">
+                    <!--html content for here-->
+                </div>
+
+            <button class="tablink" onclick="switchTab('Dataset')" id="defaultOpen">Analyse Dataset</button>
+            <button class="tablink" onclick="switchTab('Covariance')">Compute Covariance Matrix</button>
+            <button class="tablink" onclick="switchTab('Eigenvectors')">Compute Eigenvectors and Dimensionality Reduction</button>
+            <button class="tablink" onclick="switchTab('Result')">Result and Data Reconstruction</button>
+        
+        <div class="row">
+            
+            <!-- Graph -->
+     
+            <div class="six columns">
+                <div id='padding' style="widows: 400%; height:20px;"></div>
+                <h1>Principal Component Analysis</h1>
+                <div class='covariance_matrix' style="widows: 600%px; height:550%px; display:none;">
+                    <body> 
+                        <br />
+                        The  Covariance  Matrix for 4 random variables sepal width, sepal length, petal width, petal length in the normalised Fischer-Iris dataset needs to be computed next, in order to infer 
+                        how related some of the variables are.
+                        <br /><br/>
+                        <div id = "covariance_matrix">
+                        </div> 
+                        <br />
+                        You can compute all the covariances pairwise to the right. The covariance matrix is then populated above.
+                        <br /><br />
+                        <div style="text-align: center">
+                            <button class="covariance_matrix" onclick="toggleVisibility('covariancematrix');">More on spread of data</button>
+                        </div>
+                    </body>       
+                 </div>
+
+                 <div id='covariancematrix' style="widows: 600%px; height:550%px; display:none">
+                    
+                        <body>
+                            We can quantify how 'spread' data is. If we think about how spread a dataset is, it makes sense to look at the mean and see 
+                            how much all of the datapoints deviate from this. This forms the basis of how we compute the standard deviation σ and variance σ<sup>2</sup> 
+                            of a dataset with a single independent variable.
+
+                            $$\sigma = \sqrt {\frac{\sum_{i=0}^n (X_i - \bar X)^2}{n}}$$
+
+                            We alter this by dividing by n - 1 when dealing with sampled data in order to construct an unbiased estimator of the standard deviation.
+
+                            $$s = \sqrt {\frac{\sum_{i=0}^n (X_i - \bar X)^2}{n - 1}}$$
+
+                            The unbiased estimator for variance is s<sup>2</sup> and is relevant for the covariance part of the covariance matrix which we will construct.
+
+                            <br/><br/>
+                            Play around with the slider to see how a distrubution of data on the right changes as a result of changing the variance!
+                            <br/><br/>
+                            <div style="text-align: center">
+                                    
+                                <label class="sliderTitle">Standard Deviation:&nbsp;<span id="stdDevControllerDisplay" data-unit="">5</span> </label><label class="slider"><input id="stdDevController" class="inputs" type="range" value="5" min="0" max="10" step="1" onchange=
+                                "
+                                    var stdDev = parseFloat(document.getElementById('stdDevController').value); 
+                                    plotNormalGraph(numeric.linspace(-50, 50, 5000), 0, stdDev); 
+                                    document.getElementById('stdDevControllerDisplay').innerText = stdDev;
+                                "/></label>
+                            </div>
+
+                            Covariance is a measure of the joint variability of two random variables, and so is quite analogous to variance. The sign of the covariance 
+                            between two jointly distributed random variables describes the direction in which the linear relationship tends. i.e. if the covariance is positive, as one variable 
+                            increases, so too does the other. 
+
+                            <br/><br/>
+
+                            For two jointly distributed random variables X and Y, and where E[X] and E[Y] denote the 'expectation' of these variables, 
+                            the covariance is calculated as follows:
+
+                            $$cov (X, Y) = E[X-E[X]] - E[Y-E[Y]]$$
+
+                            We can do some expectation algebra to reduce it to a more easily computable form.
+
+                            $$E[X - E[X]] - E[Y - E[Y]]
+                            \\E[X - XE[Y] - XE[Y] + E[X]E[Y]] 
+                            \\E[XY] - E[X]E[Y] - E[X]E[Y] + E[X]E[Y]
+                            \\E[XY] - E[X]E[Y]
+                            $$
+
+                            So, when we compute the covariance matrix up above what we are really doing is computing this for each and every pair 
+                            of random variable and populating the matrix appropriately i.e. pental length and sepal width.
+
+                            We actually use some linear algebra to compute the covariance matrix K<sub>XY</sub> directly as follows:
+
+                            $$
+                            K_{XY} = cov(X, Y) = E[(X - \mu_X)(Y - \mu_Y)^T]
+                            \\\mu_X = E[X]
+                            \\\mu_Y = E[Y]
+                            $$
+
+                            E[X] and E[Y] respectively contain the expected values of X and Y. 
+
+
+                        </body>
+                </div>
+                
+                 
+                <div id='graph1' style="widows: 600%px; height:550%px"></div>
+                <div id='reconstructionControls' style="widows: 600%px; height:250%px; display:none">
+                    <label class="sliderTitle">Number of Principle Components:&nbsp;<span id="principalComponentsDisplay" data-unit="">2</span> </label><label class="slider"><input id="principalComponents" class="inputs" type="range" value="2" min="1" max="3" step="1"/></label>
+                    <div style="text-align: center">
+                    <button class="randomButton">Reconstruct random data point</button>
+                    <button class="reconstruction_maths" onclick="toggleVisibility('reconstructionmaths');">See some of the maths behind the data reconstruction</button>
+                    </div>
+                </div>
+                <div class='transformation3' style="widows: 600%px; height:550%px; display:none">
+                    <body>
+                            $$
+                                Reduced Data = Normalised Original Data \cdot Projection Matrix
+                            $$
+
+                            $$
+                                = 
+                                \begin{bmatrix}
+                                -0.90 & 1.03 & -1.34 & -1.31 \\
+                                -1.14 & -0.12 & -1.33 & -1.30 \\
+                                -1.38 & 0.34 & -1.40 & -1.31 \\
+                                \vdots & \vdots & \vdots & \vdots \\
+                                \end{bmatrix}
+                                \cdot
+                                \begin{bmatrix}
+                                -0.52 & -0.37 & 0.72 \\
+                                0.26 & -0.93 & -0.24 \\
+                                -0.57 & -0.07 & -0.63 \\
+                                -0.52 & -0.37 & 0.72 \\
+                                \end{bmatrix}
+                            $$
+                    </body>
+                    <br />
+                    <div style="text-align: center">
+                        <button class="transformation_maths" onclick="toggleVisibility('transformationmaths');">See some of the maths behind the transformation</button>
+                    </div>
+                </div>
+                <div class='transformation2' style="widows: 600%px; height:550%px; display:none">
+                    <body>
+                            $$
+                                Reduced Data = Normalised Original Data \cdot Projection Matrix
+                            $$
+
+                            $$
+                                = 
+                                \begin{bmatrix}
+                                -0.90 & 1.03 & -1.34 & -1.31 \\
+                                -1.14 & -0.12 & -1.33 & -1.30 \\
+                                -1.38 & 0.34 & -1.40 & -1.31 \\
+                                \vdots & \vdots & \vdots & \vdots \\
+                                \end{bmatrix}
+                                \cdot
+                                \begin{bmatrix}
+                                -0.52 & -0.37 \\
+                                0.26 & -0.93 \\
+                                -0.57 & -0.07 \\
+                                -0.52 & -0.37 \\
+                                \end{bmatrix}
+                            $$
+                    </body>
+                    <br /> 
+                    <div style="text-align: center">
+                        <button class="transformation_maths" onclick="toggleVisibility('transformationmaths');">See some of the maths behind the transformation</button>
+                    </div>
+                </div>
+            <div id='transformationmaths' style="widows: 600%px; height:550%px; display:none">
+                <body>
+                    Intuitively speaking, an eigenvector is a vector that remains unchanged when a linear transformation is applied to it.<br /><br />
+                    i.e Let C be our square covariance matrix, ν a vector and λ a scalar that satisfies Cν = λν, then λ is an eigenvalue associated with eigenvector ν of A.<br /><br />
+                    We can therefore compute the eigenvalues by solving the characteristic equation below for λ:
+                    
+                    $$
+                    det(C - λI_n) = 0
+                    $$
+
+                    With each eigenvalue λ we can then compute its eigenvector(s) computing ν by gaussian elimination.
+
+                    $$
+                    (C - λ)\cdotν = 0
+                    $$
+    
+                    We started with the goal to reduce the dimensionality of our feature space, 
+                    i.e., projecting the feature space via PCA onto a smaller subspace, where the eigenvectors will form the axes of this new feature subspace.
+                    In order to decide which eigenvectors we want to drop for our lower-dimensional subspace, we have to take a look at the corresponding eigenvalues of the eigenvectors.
+                    
+                    <br/><br/>
+
+                    The eigenvectors with the lowest eigenvalues bear the least information about the distribution of data, so we rank eigenvectors by their corresponding
+                    eigenvalues.
+                    
+                    <br/><br/>
+
+                    Ordered Eigenvectors from the Fisher's Iris Dataset:
+                    $$
+                    \begin{bmatrix}
+                    -0.52 \\
+                    0.26 \\
+                    -0.57 \\
+                    -0.52 \\
+                    \end{bmatrix},
+                    \begin{bmatrix}
+                    -0.37 \\
+                    -0.93 \\
+                    -0.07 \\
+                    -0.37 \\
+                    \end{bmatrix},
+                    \begin{bmatrix}
+                    0.72 \\
+                    -0.24 \\
+                    -0.63 \\
+                    -0.72 \\
+                    \end{bmatrix},...
+                    $$
+
+                    We then choose the transpose of the augmented matrix formed of the top k eigenvectors to be our transformation matrix W that transforms our normalised original data onto the k dimensional subspace.
+                    So for when k = 2, 
+
+                    $$
+                        W_2^T =
+                        \begin{bmatrix}
+                        -0.52 & -0.37 \\
+                        0.26 & -0.93 \\
+                        -0.57 & -0.07 \\
+                        -0.52 & -0.37 \\
+                        \end{bmatrix}
+                    $$ 
+                    
+                    So if our normalised data is represented as matrix X, the plot we see above (when the number of principal components is 2) is the computed as follows: 
+
+                    $$
+                         X\cdot W_2
+                    $$
+
+                </body>
+            </div>
+
+            <div id='reconstructionmaths' style="widows: 600%px; height:550%px; display:none">
+                <body>
+                    What we've done so far is developed a transformation matrix V<sub>k</sub> by sorting the first k number of eigenvalues associated to the eigenvecors from the eigendecomposition of 
+                    the covariance matrix, and use this to project the normalised 4 dimensional Fischer-Iris dataset represented by X on k number of principal components.
+                    <br/><br/>
+                    i.e. we did the following                   
+                    $$
+                    PC = V_k \cdot X
+                    $$
+
+                    Now if we have PC and look to recompute X, we obviously do 
+
+                    $$
+                    X = V_k^{-1} \cdot PC
+                    $$
+
+                    But as V, being a eigenvectors, is orthonormal (orthogonal because they are eigenvectors and normalised because we priorly normalised them), this is equivalent to
+
+                    $$
+                    X = V_k^T \cdot PC
+                    $$
+
+                    However we aren't done yet. As we had normalised the data earlier we need to denormalise it now so it's comparable to our original data. If σ is the standard deviation vector
+                    containing the standard deviations of every attribute of each datapoint, and μ likewise for the mean, the final reconstructed data will be computed as follows:
+                    $$
+                    V_k^T \cdot PC \cdot \sigma + \mu = X \cdot \sigma + \mu
+                    $$
+                    Remember when we picked the first k eigenvectors in constructing our transformation matrix - it's this which determines how much data we lose upon reconstruction!
+
+                </body>
+            </div>
+
+            <br /><br />
+            </div>
+
+            <!--Bottons/Sliders-->
+            <div class="six columns">
+                    
+                <!--Main Options/Tabs-->
+                <!--BEGIN Slider-->
+                    <!--These Sliders are shared among all tabs-->
+
+                    <!--Slider Display--> <!--Linked with the slider below-->
+                    <!--Linked with a slider and shows the live values of its corresponding slider-->
+                    <div id='information' style="widows: 600%; height:320%px;"></div>
+                    <div id='params' style="widows: 600%; height:100%px;"></div>
+                    <div id='graph2' style="widows: 600%;; height:550%px;"></div>
+                    <div style="text-align: center">
+                        <button class="explained_variance_maths" style="display:none;" onclick="toggleVisibility('explainedvariancemaths')">See some of the maths behind the 'Explained Variance'</button>
+                    </div>
+                    <div id='explainedvariancemaths' style="widows: 600%px; height:550%px; display:none">
+                            <body>
+                                Explained variance is a term we use to describe the proportion of the total variation in the data accounted for by a principal component.
+                                The eigenvalues themselves encode this as they come from the eigendecomposition of the covariance matrix.
+                                <br/><br/>
+
+                                If the kth principal component P<sub>k</sub> has an associated eigenvalue λ<sub>k</sub>, and we have n principal components, then the Explained Variance of P<sub>k</sub> is
+                                
+                                $$
+                                    \frac{λ_k}{\sum_{i=0}^n λ_i}
+                                $$
+
+                                i.e. calculating PC1's explained variance as above is done as follows:
+                                
+                                $$
+                                    \frac{2.91...}{2.91... + 0.147... + 0.921... + 0.021...} = 0.730...
+                                $$
+                            </body>
+                    </div>
+                    <br /><br />
+            </div>
+        </div>
+    </div>
+
+    <!--THE BRAINS-->
+    <script src="script/fisher-iris-dataset.js"></script>
+    <script src="script/pca.js"> </script>
+    <script src="script/maths-utilities.js"> </script>
+    <script src="script/general-utilities.js"> </script>
+
+
+</body>
+
+</html>

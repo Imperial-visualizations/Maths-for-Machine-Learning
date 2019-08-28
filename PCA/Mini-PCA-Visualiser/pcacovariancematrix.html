@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Page Info-->
+    <title>Principal Component Analysis</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style/skeleton.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../Penny's Game/style/guidance.css">
+    <link rel="stylesheet" href="../Penny's Game/style/skeleton.css">
+    <link rel="stylesheet" href="../Penny's Game/style/style.css">
+
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+    <script src="./script/jquery-csv.js"></script>
+    <script src="https://cdnjs.com/libraries/mathjs"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'> async </script>
+
+
+</head>
+
+<body>
+
+    <div class="guide">
+            Instructions for use
+        </div>
+        <div class="guideModal">
+            <div class="guideTest"></div>
+            <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+            <div class="modalContent">
+                <p id="modal_0">
+                    The first step in PCA is to compute a covariance, or a correlation matrix. We can do this by populating a matrix pairwise the covariances between all the normalised attributes.
+                    This will help us understand the relationships between the various attributes later.
+                </p>
+                <p id="modal_1" hidden style="text-align: center">
+                    Covariance is "the joint variability of data". Given random variables X and Y is is defined as
+                    $$\small E[X-E[X]] - E[Y-E[Y]]$$
+                    which, following some expectation algebra is equivalent to 
+                    $$
+                    \small E[XY] - E[X]E[Y]
+                    $$
+                    Select two random variables using the buttons here.
+                </p>
+                <p id="modal_2" hidden>
+                    This will then populate the covariance matrix. Whereas we are doing this through pairwise calculations, the way we do this in the background for the visualisation is by 
+                    some linear algebra:
+                    $$ \small
+                        K_{XY}
+                        \\ = cov(X, Y)
+                        \\ = E[(X - \mu_X)(Y - \mu_Y)^T]
+                    $$
+                    where 
+                    $$
+                        \\\mu_X = E[X]
+                        \\\mu_Y = E[Y]
+                    $$
+                </p>
+                <p id="modal_3" hidden>
+                    Hit next page to go to the next page.
+                </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <div id="graph" style="text-align: center"></div>
+            <div id="information" style="text-align: center"></div>
+            <br/>
+            <div id="covinfo"></div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <form action="./pcaeigenvectors.html">
+                <input type="submit" value="Next page"/>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="script/fisher-iris-dataset.js"></script>
+<script src="script/general-utilities.js"></script>
+<script src="script/maths-utilities.js"></script>
+<script src="script/covariance.js"></script>
+<script src="../Penny's Game/script/guidance.js"></script>
+
+</html>

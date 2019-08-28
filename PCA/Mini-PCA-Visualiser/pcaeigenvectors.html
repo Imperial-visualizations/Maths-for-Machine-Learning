@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Page Info-->
+    <title>Principal Component Analysis</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style/skeleton.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../Penny's Game/style/guidance.css">
+    <link rel="stylesheet" href="../Penny's Game/style/skeleton.css">
+    <link rel="stylesheet" href="../Penny's Game/style/style.css">
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'> async </script>
+    <script src="./script/jquery-csv.js"></script>
+    <script src="https://cdnjs.com/libraries/mathjs"></script>
+</head>
+
+<body>
+
+    <div class="guide">
+            Instructions for use
+    </div>
+        <div class="guideModal">
+            <div class="guideTest"></div>
+            <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+            <div class="modalContent">
+                <p id="modal_0">
+                    Here we transform the data onto a lower k dimensional subspace. The axes are the first k principal components, selected by taking the first k eigenvectors of the covariance matrix as
+                    ordered by descending associated eigenvalue.
+                </p>
+                <p id="modal_1" hidden>
+                    Move the slider to determine the number of principal components used (dimensions of the subspace). THe transformation matrix is the augmented matrix consisting of the eigenvectors of 
+                    the covariance matrix. We multiply this by the normalised data matrix. <br/> <br/> For 2 principal components we do the following $$
+                    \small \begin{bmatrix}
+                    -0.90 & 1.03 & -1.34 & -1.31 \\
+                    -1.14 & -0.12 & -1.33 & -1.30 \\
+                    -1.38 & 0.34 & -1.40 & -1.31 \\
+                    \vdots & \vdots & \vdots & \vdots \\
+                    \end{bmatrix}
+                $$
+                $$
+                    \small \cdot
+                    \begin{bmatrix}
+                    -0.52 & -0.37 \\
+                    0.26 & -0.93 \\
+                    -0.57 & -0.07 \\
+                    -0.52 & -0.37 \\
+                    \end{bmatrix}
+                $$
+                </p>
+                <p id="modal_2" hidden>
+                    See the plot here.
+                </p>
+                <p id="modal_3" hidden>
+                    Hit next page to go to the next page.
+                </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <div id="graph" style="text-align: center"></div>
+            <div id="pcslider">
+                <label class="sliderTitle">Number of Principle Components:&nbsp;<span id="aControllerDisplay" data-unit="">3</span> </label><label class="slider"><input id="aController" class="inputs" type="range" value="3" min="2" max="3" step="1"/></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <form action="./pcaexplainedvariance.html">
+                <input type="submit" value="Next page"/>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="script/fisher-iris-dataset.js"></script>
+<script src="script/general-utilities.js"></script>
+<script src="script/maths-utilities.js"></script>
+<script src="script/principalcomponents.js"></script>
+<script src="../Penny's Game/script/guidance.js"></script>
+</html>

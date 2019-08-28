@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+    <!--Page Info-->
+    <title>Disease Modelling</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style\skeleton.css">
+    <link rel="stylesheet" href="style\style.css">    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <!-- Graph -->
+            <div class="six columns">
+                <h1>Disease Modelling</h1>
+                <div id='graph' style="width:550px; height:550px;"> </div>
+            </div>
+
+            <!--Bottons/Sliders-->
+            <div class="six columns">
+                <!--Main Options/Tabs-->
+                <h1>Visualisation</h1>
+                <div id='visualisation' style="width:550px; height:550px;"> </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--THE BRAINS-->
+    <script src=script/objects.js></script>
+    <script src=script/disease.js></script>
+</body>
+
+</html>

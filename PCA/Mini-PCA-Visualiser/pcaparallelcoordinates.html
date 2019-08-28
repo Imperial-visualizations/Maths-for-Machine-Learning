@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Page Info-->
+    <title>Principal Component Analysis</title>
+    <!--css link-->
+    <link rel="stylesheet" href="style/skeleton.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../Penny's Game/style/guidance.css">
+    <link rel="stylesheet" href="../Penny's Game/style/skeleton.css">
+    <link rel="stylesheet" href="../Penny's Game/style/style.css">
+
+    <!--Required JS resources--> <!--NB: better to have resources before the main body but still works even if they are not-->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src=script/numeric/src/numeric.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.15.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'> async </script>
+    <script src="./script/jquery-csv.js"></script>
+    <script src="https://cdnjs.com/libraries/mathjs"></script>
+</head>
+
+<body>
+    <div class="guide">
+            Instructions for use
+    </div>
+        <div class="guideModal">
+            <div class="guideTest"></div>
+            <button class="backBtn">◀ Back</button> <button class="nextBtn">Next ▶</button>
+            <div class="modalContent">
+                <p id="modal_0">
+                    This is a visualisation suite for Principal Component Analysis.
+                </p>
+                <p id="modal_1" hidden>
+                    To start off with, we're going to explore why we need PCA. Move the slider along the Parallel Coordinate plot of the Fisher Iris dataset which 
+                    documents 4 attributes of flowers.
+                </p>
+                <p id="modal_2" hidden>
+                    Let's see why this dataset so well illustrates the need for Principal Component Analysis.
+                </p>
+                <p id="modal_3" hidden>
+                    Hit next page to go to the next page.
+                </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <div id="graph"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="twelve columns">
+                <div id="information" style="text-align: center; background-color: lightblue; margin-left: 20%; margin-right: 20%">
+                    <p>There's alot of information in this plot and it's really hard for someone like you or me to get a gist for what the data is actually saying.
+                        This dataset is said to be four dimensional - there are four attributes to each datapoint
+                    </p>
+                </div>
+            </div>
+    </div>
+    <div class="row">
+        <div class="twelve columns" style="text-align: center">
+            <form action="./pcatwoplots.html">
+                <input type="submit" value="Next page"/>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="script/fisher-iris-dataset.js"></script>
+<script src="script/general-utilities.js"></script>
+<script src="script/maths-utilities.js"></script>
+<script src="script/parallelcoordinates.js"></script>
+<script src="../Penny's Game/script/guidance.js"></script>
+</html>
